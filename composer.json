@@ -1,0 +1,17 @@
+{
+    "name": "schranz/test-generator",
+    "description": "A cli tool which generates unit tests.",
+    "license": "MIT",
+    "keywords": [
+        "generator",
+        "tests",
+        "unit tests",
+        "phpunit"
+    ],
+    "require": {
+        "php": "^8.0",
+        "nikic/php-parser": "^4.13",
+        "symfony/filesystem": "^6.0",
+        "symfony/string": "^6.0"
+    }
+}
