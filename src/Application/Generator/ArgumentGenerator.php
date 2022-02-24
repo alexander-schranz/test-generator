@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Schranz\TestGenerator\Application\Generator;
 
-use PhpParser\Node\Identifier;
+use PhpParser\BuilderFactory;
 use PhpParser\Node\NullableType;
 use function Symfony\Component\String\u;
 
@@ -22,25 +22,37 @@ use function Symfony\Component\String\u;
  */
 class ArgumentGenerator
 {
+    private DateTimeGenerator $dateTimeGenerator;
+
+    public function __construct(?DateTimeGenerator $dateTimeGenerator = null)
+    {
+        $this->dateTimeGenerator = $dateTimeGenerator ?: new DateTimeGenerator();
+    }
+
     /**
      * @return mixed[]
      */
-    public function generateArguments(array $methodAttributes, string $behaviour = 'minimal'): array
+    public function generateArguments(array $methodAttributes, array &$additionalUsages, string $behaviour = 'minimal'): array
     {
+        $factory = new BuilderFactory();
+
         $attributes = [];
         foreach ($methodAttributes['params'] as $attributeName => $attributeConfig) {
             $attribute = 'TODO';
-            $typeName = null;
+            $type = null;
 
             if ($attributeConfig instanceof NullableType && 'minimal' === $behaviour) {
                 $attributes[] = null;
 
                 continue;
-            } elseif ($attributeConfig instanceof NullableType) {
-                $typeName = $attributeConfig->type->name;
-            } elseif ($attributeConfig instanceof Identifier) {
-                $typeName = $attributeConfig->name;
             }
+
+            $type = $attributeConfig;
+            if ($type instanceof NullableType) {
+                $type = $attributeConfig->type;
+            }
+
+            $typeName = $type->toString();
 
             if ('string' === $typeName) {
                 $attributes[] = u($attributeName)->title()->toString();
@@ -60,6 +72,30 @@ class ArgumentGenerator
                 }
 
                 $attribute = $floatAttributes[$attributeName];
+            } elseif ('DateTimeImmutable' === $typeName) {
+                static $dateTimeImmutableAttributes = [];
+                if (!isset($dateTimeImmutableAttributes[$attributeName])) {
+                    $value = $this->dateTimeGenerator->generate();
+                    $dateTimeImmutableAttributes[$attributeName] = $factory->new(
+                        \DateTimeImmutable::class,
+                        [$value->format('Y-m-d H:i:s')]
+                    );
+                }
+
+                $attribute = $dateTimeImmutableAttributes[$attributeName];
+                $additionalUsages[\DateTimeImmutable::class] = $factory->use(\DateTimeImmutable::class)->getNode();
+            } elseif ('Datetime' === $typeName) {
+                static $dateTimeAttributes = [];
+                if (!isset($dateTimeAttributes[$attributeName])) {
+                    $value = $this->dateTimeGenerator->generate();
+                    $dateTimeAttributes[$attributeName] = $factory->new(
+                        \DateTime::class,
+                        [$value->format('Y-m-d H:i:s')]
+                    );
+                }
+
+                $attribute = $dateTimeAttributes[$attributeName];
+                $additionalUsages[\DateTime::class] = $factory->use(\DateTime::class)->getNode();
             }
 
             $attributes[] = $attribute;

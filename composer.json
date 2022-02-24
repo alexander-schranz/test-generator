@@ -50,6 +50,7 @@
         "jangregor/phpstan-prophecy": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
         "phpstan/phpstan-webmozart-assert": "^1.0",
-        "thecodingmachine/phpstan-strict-rules": "^1.0"
+        "thecodingmachine/phpstan-strict-rules": "^1.0",
+        "phpspec/prophecy-phpunit": "^2.0"
     }
 }

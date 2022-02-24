@@ -13,7 +13,15 @@ declare(strict_types=1);
 
 namespace Schranz\TestGenerator\UserInterface\Command;
 
-require \dirname(__DIR__, 3) . '/vendor/autoload.php';
+$autoloadFiles = [
+    \dirname(__DIR__, 5) . '/autoload.php',
+    \dirname(__DIR__, 3) . '/vendor/autoload.php',
+];
+foreach ($autoloadFiles as $autoloadFile) {
+    if (\file_exists($autoloadFile)) {
+        include_once $autoloadFile;
+    }
+}
 
 use Schranz\TestGenerator\Application\Generator\ArgumentGenerator;
 use Schranz\TestGenerator\Application\Generator\TestFileGenerator;

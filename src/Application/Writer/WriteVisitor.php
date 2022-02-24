@@ -21,6 +21,8 @@ use function Symfony\Component\String\u;
  */
 final class WriteVisitor extends NodeVisitorAbstract
 {
+    private array $additionalUsages = [];
+
     public function __construct(
         private ReadVisitor $readVisitor,
         private ArgumentGenerator $argumentGenerator,
@@ -74,9 +76,9 @@ final class WriteVisitor extends NodeVisitorAbstract
                 );
 
                 $setterArgumentsList = [];
-                $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'minimal');
+                $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], $this->additionalUsages, 'minimal');
                 if (($setterArgumentsList[0][0] ?? null) === null) {
-                    $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'full');
+                    $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], $this->additionalUsages, 'full');
                     $setterArgumentsList = \array_reverse($setterArgumentsList);
                 }
 
@@ -190,5 +192,10 @@ final class WriteVisitor extends NodeVisitorAbstract
         $node->stmts[] = $builder->getNode();
 
         return $node;
+    }
+
+    public function getAdditionalUsages(): array
+    {
+        return \array_values($this->additionalUsages);
     }
 }

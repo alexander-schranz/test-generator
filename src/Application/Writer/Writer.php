@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Schranz\TestGenerator\Application\Writer;
 
 use PhpParser\Lexer\Emulative;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
@@ -32,6 +33,9 @@ class Writer
         $oldTokens = $lexer->getTokens();
 
         $traversedNodes = $nodeTraverser->traverse($nodes);
+        if ($traversedNodes[0] instanceof Namespace_) {
+            $traversedNodes[0]->stmts = \array_merge($writeVisitor->getAdditionalUsages(), $traversedNodes[0]->stmts);
+        }
 
         return $printer->printFormatPreserving($traversedNodes, $nodes, $oldTokens);
     }
