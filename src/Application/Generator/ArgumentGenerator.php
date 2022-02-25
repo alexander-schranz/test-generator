@@ -22,13 +22,6 @@ use function Symfony\Component\String\u;
  */
 class ArgumentGenerator
 {
-    private DateTimeGenerator $dateTimeGenerator;
-
-    public function __construct(?DateTimeGenerator $dateTimeGenerator = null)
-    {
-        $this->dateTimeGenerator = $dateTimeGenerator ?: new DateTimeGenerator();
-    }
-
     /**
      * @return mixed[]
      */
@@ -75,10 +68,11 @@ class ArgumentGenerator
             } elseif ('DateTimeImmutable' === $typeName) {
                 static $dateTimeImmutableAttributes = [];
                 if (!isset($dateTimeImmutableAttributes[$attributeName])) {
-                    $value = $this->dateTimeGenerator->generate();
+                    $value = $dateTimeImmutableAttributes[\count($dateTimeImmutableAttributes) - 1] ?? new \DateTime('2021-12-31');
+                    $value->add(\DateInterval::createFromDateString('1 day'));
                     $dateTimeImmutableAttributes[$attributeName] = $factory->new(
                         \DateTimeImmutable::class,
-                        [$value->format('Y-m-d H:i:s')]
+                        [$value->format('Y-m-d')]
                     );
                 }
 
@@ -87,10 +81,11 @@ class ArgumentGenerator
             } elseif ('Datetime' === $typeName) {
                 static $dateTimeAttributes = [];
                 if (!isset($dateTimeAttributes[$attributeName])) {
-                    $value = $this->dateTimeGenerator->generate();
+                    $value = $dateTimeImmutableAttributes[\count($dateTimeAttributes) - 1] ?? new \DateTime('2021-12-31');
+                    $value->add(\DateInterval::createFromDateString('1 day'));
                     $dateTimeAttributes[$attributeName] = $factory->new(
                         \DateTime::class,
-                        [$value->format('Y-m-d H:i:s')]
+                        [$value->format('Y-m-d')]
                     );
                 }
 

@@ -7,7 +7,6 @@ namespace Schranz\TestGenerator\Tests;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Schranz\TestGenerator\Application\Generator\ArgumentGenerator;
-use Schranz\TestGenerator\Application\Generator\DateTimeGenerator;
 use Schranz\TestGenerator\Application\Generator\TestFileGenerator;
 use Schranz\TestGenerator\Application\Grouper\MethodGrouper;
 use Schranz\TestGenerator\Application\Reader\Reader;
@@ -53,13 +52,10 @@ class AbstractTestCase extends TestCase
         $testFileGenerator = new TestFileGenerator();
         $unitTestFileContent = $testFileGenerator->generateTestFile($readVisitor->getClass(), $config ?? new Config());
 
-        $dateTimeGenerator = $this->prophesize(DateTimeGenerator::class);
-        $dateTimeGenerator->generate()->willReturn(new \DateTime('2022-02-24 12:00:00'));
-
         // Write File
         $writeVisitor = new WriteVisitor(
             $readVisitor,
-            new ArgumentGenerator($dateTimeGenerator->reveal()),
+            new ArgumentGenerator(),
             new MethodGrouper()
         );
 
