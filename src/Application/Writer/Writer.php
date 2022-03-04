@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Schranz\TestGenerator\Application\Writer;
 
 use PhpParser\Lexer\Emulative;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;

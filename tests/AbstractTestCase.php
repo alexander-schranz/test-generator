@@ -33,7 +33,7 @@ class AbstractTestCase extends TestCase
 
         foreach ($finder as $file) {
             if ($file instanceof \SplFileInfo) {
-                yield str_replace(getcwd() . '/', '', $file->getPathname()) => [$file];
+                yield \str_replace(\getcwd() . '/', '', $file->getPathname()) => [$file];
             }
         }
     }
@@ -67,7 +67,7 @@ class AbstractTestCase extends TestCase
         }
 
         $testFile = \tempnam(\sys_get_temp_dir() . '/test-generator', 'TestGenerator_');
-        rename($testFile, $testFile . '.php');
+        \rename($testFile, $testFile . '.php');
         $testFile .= '.php';
 
         try {

@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $services = $containerConfigurator->services();
 
-    $parameters->set(Option::PATHS, [sys_get_temp_dir() . '/test-generator']);
+    $parameters->set(Option::PATHS, [\sys_get_temp_dir() . '/test-generator']);
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/../phpstan.neon');
 
     // basic rules
