@@ -17,7 +17,7 @@ public function setTitle(?string $title): void
     $this->title = $title;
 }
 
-public function getTitle(string $title): void
+public function getTitle(): void
 {
     $this->title = $title;
 }
@@ -34,7 +34,7 @@ public function testSetTitle(): void
 }
 ```
 
-But as `?string` can be seen as an union type of `string|null` the testcase for `null` is missing:
+But as `?string` can be seen as an union type of `string|null` the testcase for `null` type is missing:
 
 ```php
 public function testSetTitleNull(): void
@@ -45,7 +45,7 @@ public function testSetTitleNull(): void
 }
 ```
 
-The project target is to already generate also the boilderplate for that test case.
+The project target is to already generate also the boilerplate for that test case.
 
 ## Installation
 
