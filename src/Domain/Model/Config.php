@@ -12,7 +12,7 @@ class Config
     /**
      * @var array<string, string>
      */
-    public array $namespaceReplaces = ['App' => 'App\Tests\Unit'];
+    public array $namespaceReplaces = ['App\\' => 'App\\Tests\\Unit\\'];
 
     public string $classPostfix = 'Test';
 
