@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__);
+    ->in(\sys_get_temp_dir() . '/test-generator');
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
@@ -37,5 +37,6 @@ return (new PhpCsFixer\Config())
         'multiline_whitespace_before_semicolons' => true,
         'single_line_throw' => false,
         'visibility_required' => ['elements' => ['property', 'method', 'const']],
+        'psr_autoloading' => false,
     ])
     ->setFinder($finder);

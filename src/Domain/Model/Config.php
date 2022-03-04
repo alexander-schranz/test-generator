@@ -25,6 +25,7 @@ class Config
      * @var string[]
      */
     public array $hooks = [
+        // 'vendor/bin/rector process %s'
         // 'vendor/bin/php-cs-fixer fix %s'
     ];
 

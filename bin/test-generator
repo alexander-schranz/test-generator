@@ -1,4 +1,4 @@
 #!/usr/bin/env php
 <?php
 
-require dirname(__DIR__).'/src/UserInterface/Command/test-generator.php';
+require \dirname(__DIR__) . '/src/UserInterface/Command/test-generator.php';

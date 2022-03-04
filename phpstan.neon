@@ -13,3 +13,4 @@ parameters:
     excludePaths:
         - %currentWorkingDirectory%/vendor/*
         - %currentWorkingDirectory%/var/*
+        - %currentWorkingDirectory%/tests/*/Fixture/*

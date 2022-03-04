@@ -166,7 +166,7 @@ final class WriteVisitor extends NodeVisitorAbstract
 
         $return = new Return_(
             $factory->new(
-                $this->readVisitor->getClassName(),
+                '\\' . $this->readVisitor->getClass(),
                 $args
             )
         );
@@ -175,7 +175,7 @@ final class WriteVisitor extends NodeVisitorAbstract
             ->addStmt(
                 $return
             )
-            ->setReturnType($this->readVisitor->getClassName())
+            ->setReturnType('\\' . $this->readVisitor->getClass())
             ->makePublic();
 
         // TODO add phpdoc
