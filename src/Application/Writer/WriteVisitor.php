@@ -75,12 +75,27 @@ final class WriteVisitor extends NodeVisitorAbstract
 
                 $setterArgumentsList = [];
                 $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'minimal');
-                if (($setterArgumentsList[0][0] ?? null) === null) {
+                if (($setterArgumentsList[0][\array_key_first($setterArgumentsList[0])] ?? null) === null) {
                     $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'full');
                     $setterArgumentsList = \array_reverse($setterArgumentsList);
                 }
 
                 foreach ($setterArgumentsList as $setterArguments) {
+                    foreach ($setterArguments as $attributeName => $setterArgument) {
+                        if ($setterArgument instanceof Node\Expr\New_) {
+                            $method->addStmt(
+                                new Node\Expr\Assign(
+                                    $factory->var($attributeName),
+                                    $setterArgument
+                                )
+                            );
+
+                            $setterArguments[$attributeName] = $factory->var($attributeName);
+                        }
+                    }
+
+                    $setterArguments = \array_values($setterArguments);
+
                     $setterMethod = $factory->methodCall(
                         $factory->var('model'),
                         $testMethodConfig['options']['setMethod'],
