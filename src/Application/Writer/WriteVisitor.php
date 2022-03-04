@@ -75,7 +75,7 @@ final class WriteVisitor extends NodeVisitorAbstract
 
                 $setterArgumentsList = [];
                 $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'minimal');
-                if (($setterArgumentsList[0][array_key_first($setterArgumentsList[0])] ?? null) === null) {
+                if (($setterArgumentsList[0][\array_key_first($setterArgumentsList[0])] ?? null) === null) {
                     $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'full');
                     $setterArgumentsList = \array_reverse($setterArgumentsList);
                 }
@@ -94,7 +94,7 @@ final class WriteVisitor extends NodeVisitorAbstract
                         }
                     }
 
-                    $setterArguments = array_values($setterArguments);
+                    $setterArguments = \array_values($setterArguments);
 
                     $setterMethod = $factory->methodCall(
                         $factory->var('model'),
