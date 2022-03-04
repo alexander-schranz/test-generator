@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Schranz\TestGenerator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Schranz\TestGenerator\Application\Generator\ArgumentGenerator;
 use Schranz\TestGenerator\Application\Generator\TestFileGenerator;
 use Schranz\TestGenerator\Application\Grouper\MethodGrouper;
@@ -18,8 +17,6 @@ use Symfony\Component\Process\Process;
 
 class AbstractTestCase extends TestCase
 {
-    use ProphecyTrait;
-
     /**
      * @return \Generator<\SplFileInfo>
      */

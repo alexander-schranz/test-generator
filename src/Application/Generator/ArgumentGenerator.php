@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Schranz\TestGenerator\Application\Generator;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use function Symfony\Component\String\u;
 
@@ -23,6 +26,11 @@ use function Symfony\Component\String\u;
 class ArgumentGenerator
 {
     /**
+     * @param array{
+     *     params: array<string, null|Identifier|Name|ComplexType>,
+     *     returnType: array<string, null|Identifier|Name|ComplexType>,
+     * } $methodAttributes
+     *
      * @return mixed[]
      */
     public function generateArguments(array $methodAttributes, string $behaviour = 'minimal'): array
