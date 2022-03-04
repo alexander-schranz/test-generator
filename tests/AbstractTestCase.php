@@ -33,7 +33,7 @@ class AbstractTestCase extends TestCase
 
         foreach ($finder as $file) {
             if ($file instanceof \SplFileInfo) {
-                yield str_replace(getcwd() . '/', '', $file->getPathname()) => [$file];
+                yield \str_replace(getcwd() . '/', '', $file->getPathname()) => [$file];
             }
         }
     }
