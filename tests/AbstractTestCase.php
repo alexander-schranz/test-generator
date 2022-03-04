@@ -33,7 +33,7 @@ class AbstractTestCase extends TestCase
 
         foreach ($finder as $file) {
             if ($file instanceof \SplFileInfo) {
-                yield [$file];
+                yield str_replace(getcwd() . '/', '', $file->getPathname()) => [$file];
             }
         }
     }
@@ -67,9 +67,16 @@ class AbstractTestCase extends TestCase
         }
 
         $testFile = \tempnam(\sys_get_temp_dir() . '/test-generator', 'TestGenerator_');
+        rename($testFile, $testFile . '.php');
+        $testFile .= '.php';
 
         try {
             \file_put_contents($testFile, $result);
+
+            $process = new Process(['vendor/bin/rector', 'process', $testFile, '--config', __DIR__ . '/rector.php'], \dirname(__DIR__));
+            if ($process->run()) {
+                throw new \RuntimeException('Rector did fail to fix the file.');
+            }
 
             $process = new Process(['vendor/bin/php-cs-fixer', 'fix', $testFile, '--config', __DIR__ . '/.php-cs-fixer.dist.php'], \dirname(__DIR__));
             if ($process->run()) {

@@ -33,9 +33,6 @@ class Writer
         $oldTokens = $lexer->getTokens();
 
         $traversedNodes = $nodeTraverser->traverse($nodes);
-        if ($traversedNodes[0] instanceof Namespace_) {
-            $traversedNodes[0]->stmts = \array_merge($writeVisitor->getAdditionalUsages(), $traversedNodes[0]->stmts);
-        }
 
         return $printer->printFormatPreserving($traversedNodes, $nodes, $oldTokens);
     }

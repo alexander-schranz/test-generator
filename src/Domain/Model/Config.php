@@ -12,7 +12,7 @@ class Config
     /**
      * @var array<string, string>
      */
-    public array $namespaceReplaces = ['App\\' => 'App\\Tests\\Unit\\'];
+    public array $namespaceReplaces = ['App' => 'App\Tests\Unit'];
 
     public string $classPostfix = 'Test';
 
@@ -25,6 +25,7 @@ class Config
      * @var string[]
      */
     public array $hooks = [
+        // 'vendor/bin/rector process %s'
         // 'vendor/bin/php-cs-fixer fix %s'
     ];
 

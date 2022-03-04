@@ -25,7 +25,7 @@ class ArgumentGenerator
     /**
      * @return mixed[]
      */
-    public function generateArguments(array $methodAttributes, array &$additionalUsages, string $behaviour = 'minimal'): array
+    public function generateArguments(array $methodAttributes, string $behaviour = 'minimal'): array
     {
         $factory = new BuilderFactory();
 
@@ -71,26 +71,24 @@ class ArgumentGenerator
                     $value = $dateTimeImmutableAttributes[\count($dateTimeImmutableAttributes) - 1] ?? new \DateTime('2021-12-31');
                     $value->add(\DateInterval::createFromDateString('1 day'));
                     $dateTimeImmutableAttributes[$attributeName] = $factory->new(
-                        \DateTimeImmutable::class,
+                        '\\' . \DateTimeImmutable::class,
                         [$value->format('Y-m-d')]
                     );
                 }
 
                 $attribute = $dateTimeImmutableAttributes[$attributeName];
-                $additionalUsages[\DateTimeImmutable::class] = $factory->use(\DateTimeImmutable::class)->getNode();
             } elseif ('Datetime' === $typeName) {
                 static $dateTimeAttributes = [];
                 if (!isset($dateTimeAttributes[$attributeName])) {
                     $value = $dateTimeImmutableAttributes[\count($dateTimeAttributes) - 1] ?? new \DateTime('2021-12-31');
                     $value->add(\DateInterval::createFromDateString('1 day'));
                     $dateTimeAttributes[$attributeName] = $factory->new(
-                        \DateTime::class,
+                        '\\' . \DateTime::class,
                         [$value->format('Y-m-d')]
                     );
                 }
 
                 $attribute = $dateTimeAttributes[$attributeName];
-                $additionalUsages[\DateTime::class] = $factory->use(\DateTime::class)->getNode();
             }
 
             $attributes[] = $attribute;
