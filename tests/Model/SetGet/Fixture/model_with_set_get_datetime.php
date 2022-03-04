@@ -33,8 +33,9 @@ class ModelWithSetGetBirthdayTest extends TestCase
     {
         $model = $this->createInstance();
         $this->assertNull($model->getBirthday());
-        $model->setBirthday(new DateTime('2022-01-01'));
-        $this->assertSame(new DateTime('2022-01-01'), $model->getBirthday());
+        $birthday = new DateTime('2022-01-01');
+        $model->setBirthday($birthday);
+        $this->assertSame($birthday, $model->getBirthday());
         $this->markAsRisky();
     }
 

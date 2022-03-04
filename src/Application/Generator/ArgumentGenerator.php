@@ -99,7 +99,7 @@ class ArgumentGenerator
                 $attribute = $dateTimeAttributes[$attributeName];
             }
 
-            $attributes[] = $attribute;
+            $attributes[$attributeName] = $attribute;
         }
 
         return $attributes;
