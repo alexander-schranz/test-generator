@@ -17,6 +17,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use function Symfony\Component\String\u;
 
@@ -40,20 +41,19 @@ class ArgumentGenerator
         $attributes = [];
         foreach ($methodAttributes['params'] as $attributeName => $attributeConfig) {
             $attribute = 'TODO';
-            $type = null;
+            $typeName = null;
 
             if ($attributeConfig instanceof NullableType && 'minimal' === $behaviour) {
                 $attributes[] = null;
 
                 continue;
+            } elseif ($attributeConfig instanceof NullableType) {
+                $typeName = $attributeConfig->type->toString();
+            } elseif ($attributeConfig instanceof Identifier) {
+                $typeName = $attributeConfig->name;
+            } elseif($attributeConfig instanceof FullyQualified) {
+                $typeName = $attributeConfig->toString();
             }
-
-            $type = $attributeConfig;
-            if ($type instanceof NullableType) {
-                $type = $attributeConfig->type;
-            }
-
-            $typeName = $type->toString();
 
             if ('string' === $typeName) {
                 $attributes[] = u($attributeName)->title()->toString();
