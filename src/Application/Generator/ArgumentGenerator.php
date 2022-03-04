@@ -51,7 +51,7 @@ class ArgumentGenerator
                 $typeName = $attributeConfig->type->toString();
             } elseif ($attributeConfig instanceof Identifier) {
                 $typeName = $attributeConfig->name;
-            } elseif($attributeConfig instanceof FullyQualified) {
+            } elseif ($attributeConfig instanceof FullyQualified) {
                 $typeName = $attributeConfig->toString();
             }
 
