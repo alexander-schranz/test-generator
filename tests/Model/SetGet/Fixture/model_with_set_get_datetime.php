@@ -6,12 +6,12 @@ class ModelWithSetGetBirthday
 {
     private \DateTime $birthday;
 
-    public function setBirthday(\Datetime $birthday): void
+    public function setBirthday(\DateTime $birthday): void
     {
         $this->birthday = $birthday;
     }
 
-    public function getBirthday(): \Datetime
+    public function getBirthday(): \DateTime
     {
         return $this->birthday;
     }

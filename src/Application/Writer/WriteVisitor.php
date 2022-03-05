@@ -6,15 +6,14 @@ namespace Schranz\TestGenerator\Application\Writer;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use Schranz\TestGenerator\Application\Generator\ArgumentGenerator;
 use Schranz\TestGenerator\Application\Grouper\MethodGrouper;
 use Schranz\TestGenerator\Application\Reader\ReadVisitor;
-use function Symfony\Component\String\u;
 
 /**
  * @internal
@@ -39,10 +38,12 @@ final class WriteVisitor extends NodeVisitorAbstract
 
         $testMethodConfigs = $this->methodGrouper->groupMethods($this->readVisitor->getMethods());
 
-        $constructParams = [];
+        $constructAttributes = ['params' => []];
+        $constructArguments = [];
         foreach ($testMethodConfigs as $testMethodName => $testMethodConfig) {
             if ('construct' === $testMethodConfig['type']) {
-                $constructParams = $testMethodConfig['options']['attributes']['params'];
+                $constructAttributes = $testMethodConfig['options']['attributes'];
+                $constructArguments = $this->argumentGenerator->generateArguments($constructAttributes, 'minimal');
 
                 continue;
             }
@@ -51,14 +52,14 @@ final class WriteVisitor extends NodeVisitorAbstract
                 ->makePublic()
                 ->setReturnType('void');
 
-            $method->addStmt(
-                new Node\Expr\Assign(
-                    $factory->var('model'),
-                    $factory->methodCall($factory->var('this'), $testFactoryMethod)
-                )
-            );
-
             if ('get_set' === $testMethodConfig['type']) {
+                $method->addStmt(
+                    new Node\Expr\Assign(
+                        $factory->var('model'),
+                        $factory->methodCall($factory->var('this'), $testFactoryMethod)
+                    )
+                );
+
                 $method->addStmt(
                     $factory->methodCall(
                         $factory->var('this'),
@@ -75,7 +76,7 @@ final class WriteVisitor extends NodeVisitorAbstract
 
                 $setterArgumentsList = [];
                 $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'minimal');
-                if (($setterArgumentsList[0][\array_key_first($setterArgumentsList[0])] ?? null) === null) {
+                if ($setterArgumentsList[0][\array_key_first($setterArgumentsList[0])] instanceof Node\Expr\ConstFetch) {
                     $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'full');
                     $setterArgumentsList = \array_reverse($setterArgumentsList);
                 }
@@ -136,18 +137,61 @@ final class WriteVisitor extends NodeVisitorAbstract
                     );
                 }
             } elseif ('get' === $testMethodConfig['type']) {
+                $methodAttributeName = \lcfirst(\str_replace('get', '', $testMethodConfig['options']['method']));
+                $generatedConstructParams = $this->argumentGenerator->generateArguments($constructAttributes);
+                $constructorArguments = [];
+
+                if (isset($generatedConstructParams[$methodAttributeName])) {
+                    if ($generatedConstructParams[$methodAttributeName] instanceof Node\Expr\New_) {
+                        $method->addStmt(
+                            new Node\Expr\Assign(
+                                $factory->var($methodAttributeName),
+                                $generatedConstructParams[$methodAttributeName]
+                            )
+                        );
+
+                        $generatedConstructParams[$methodAttributeName] = $factory->var($methodAttributeName);
+                    }
+
+                    $constructorArguments[] = [$methodAttributeName => $generatedConstructParams[$methodAttributeName]];
+                }
+
+                $method->addStmt(
+                    new Node\Expr\Assign(
+                        $factory->var('model'),
+                        $factory->methodCall(
+                            $factory->var('this'),
+                            $testFactoryMethod,
+                            $constructorArguments
+                        )
+                    )
+                );
+
                 $method->addStmt(
                     $factory->methodCall(
                         $factory->var('this'),
                         'assertSame',
                         [
-                            'TODO',
+                            $generatedConstructParams[$methodAttributeName] ?? 'TODO',
                             $factory->methodCall($factory->var('model'), $testMethodConfig['options']['method']),
                         ]
                     )
                 );
             } elseif ('set' === $testMethodConfig['type']) {
+                $method->addStmt(
+                    new Node\Expr\Assign(
+                        $factory->var('model'),
+                        $factory->methodCall($factory->var('this'), $testFactoryMethod)
+                    )
+                );
             } else {
+                $method->addStmt(
+                    new Node\Expr\Assign(
+                        $factory->var('model'),
+                        $factory->methodCall($factory->var('this'), $testFactoryMethod)
+                    )
+                );
+
                 $method->addStmt(
                     $factory->methodCall($factory->var('model'), $testMethodConfig['options']['method'])
                 );
@@ -164,19 +208,11 @@ final class WriteVisitor extends NodeVisitorAbstract
         }
 
         $args = [];
-        /**
-         * @var string $key
-         * @var Name $type
-         */
-        foreach ($constructParams as $key => $type) {
-            $defaultValue = '"TODO"';
-            if ($type instanceof Identifier) {
-                if ('string' === $type->name) {
-                    $defaultValue = '"' . u($key)->title() . '"';
-                }
-            }
-
-            $args[] = $factory->var('data["' . $key . '"] ?? ' . $defaultValue);
+        foreach (\array_keys($constructAttributes['params']) as $key) {
+            $args[] = new Coalesce(
+                $factory->var('data["' . $key . '"]'),
+                $constructArguments[$key] instanceof Node\Expr ? $constructArguments[$key] : $factory->val($constructArguments[$key])
+            );
         }
 
         $return = new Return_(
@@ -194,7 +230,7 @@ final class WriteVisitor extends NodeVisitorAbstract
             ->makePublic();
 
         // TODO add phpdoc
-        if (\count($constructParams)) {
+        if (\count($constructAttributes['params'])) {
             $builder
                 ->addParam(
                     $factory->param('data')

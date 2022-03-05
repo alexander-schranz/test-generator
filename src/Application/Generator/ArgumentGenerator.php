@@ -15,6 +15,7 @@ namespace Schranz\TestGenerator\Application\Generator;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -32,7 +33,7 @@ class ArgumentGenerator
      *     returnType: array<string, null|Identifier|Name|ComplexType>,
      * } $methodAttributes
      *
-     * @return mixed[]
+     * @return Expr[]
      */
     public function generateArguments(array $methodAttributes, string $behaviour = 'minimal'): array
     {
@@ -44,7 +45,7 @@ class ArgumentGenerator
             $typeName = null;
 
             if ($attributeConfig instanceof NullableType && 'minimal' === $behaviour) {
-                $attributes[] = null;
+                $attributes[$attributeName] = $factory->val(null);
 
                 continue;
             } elseif ($attributeConfig instanceof NullableType) {
@@ -53,10 +54,12 @@ class ArgumentGenerator
                 $typeName = $attributeConfig->name;
             } elseif ($attributeConfig instanceof FullyQualified) {
                 $typeName = $attributeConfig->toString();
+            } elseif ($attributeConfig instanceof Name) {
+                $typeName = $attributeConfig->toString();
             }
 
             if ('string' === $typeName) {
-                $attributes[] = u($attributeName)->title()->toString();
+                $attributes[$attributeName] = $factory->val(u($attributeName)->title()->toString());
                 continue;
             } elseif ('int' === $typeName) {
                 static $intAttributes = [];
@@ -85,7 +88,7 @@ class ArgumentGenerator
                 }
 
                 $attribute = $dateTimeImmutableAttributes[$attributeName];
-            } elseif ('Datetime' === $typeName) {
+            } elseif ('DateTime' === $typeName) {
                 static $dateTimeAttributes = [];
                 if (!isset($dateTimeAttributes[$attributeName])) {
                     $value = $dateTimeImmutableAttributes[\count($dateTimeAttributes) - 1] ?? new \DateTime('2021-12-31');
@@ -99,7 +102,7 @@ class ArgumentGenerator
                 $attribute = $dateTimeAttributes[$attributeName];
             }
 
-            $attributes[$attributeName] = $attribute;
+            $attributes[$attributeName] = $attribute instanceof Expr ? $attribute : $factory->val($attribute);
         }
 
         return $attributes;
