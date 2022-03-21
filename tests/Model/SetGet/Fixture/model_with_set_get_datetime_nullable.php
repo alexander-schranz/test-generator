@@ -27,6 +27,9 @@ use App\ModelWithSetGetBirthday;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithSetGetBirthday
+ */
 class ModelWithSetGetBirthdayTest extends TestCase
 {
     public function testSetGetBirthday(): void

@@ -17,6 +17,9 @@ namespace App\Tests\Unit;
 use App\ModelWithConstructorArguments;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithConstructorArguments
+ */
 class ModelWithConstructorArgumentsTest extends TestCase
 {
     public function createInstance($data = []): ModelWithConstructorArguments

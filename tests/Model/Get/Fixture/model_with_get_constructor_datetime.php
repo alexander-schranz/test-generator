@@ -29,6 +29,9 @@ use App\ModelWithGetConstructor;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithGetConstructor
+ */
 class ModelWithGetConstructorTest extends TestCase
 {
     public function testGetDateTime(): void

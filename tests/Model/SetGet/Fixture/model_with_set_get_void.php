@@ -26,6 +26,9 @@ namespace App\Tests\Unit;
 use App\ModelWithSetGetVoid;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithSetGetVoid
+ */
 class ModelWithSetGetVoidTest extends TestCase
 {
     public function testSetGetTitle(): void
