@@ -26,6 +26,9 @@ namespace App\Tests\Unit;
 use App\ModelWithSetGetFloat;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithSetGetFloat
+ */
 class ModelWithSetGetFloatTest extends TestCase
 {
     public function testSetGetNumber(): void

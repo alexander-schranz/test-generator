@@ -18,6 +18,9 @@ namespace App\Tests\Unit;
 use App\ModelWithoutConstructorArguments;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithoutConstructorArguments
+ */
 class ModelWithoutConstructorArgumentsTest extends TestCase
 {
     public function createInstance(): ModelWithoutConstructorArguments

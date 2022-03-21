@@ -26,6 +26,9 @@ namespace App\Tests\Unit;
 use App\ModelWithSetGetInt;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithSetGetInt
+ */
 class ModelWithSetGetIntTest extends TestCase
 {
     public function testSetGetTitle(): void

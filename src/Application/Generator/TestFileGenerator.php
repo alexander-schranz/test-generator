@@ -40,6 +40,9 @@ namespace $testNamespace;
 use $testExtendClass;
 use $class;
 
+/**
+ * @covers \\$class
+ */
 class $testClassName extends $testExtendClassName
 {
 

@@ -26,6 +26,9 @@ namespace App\Tests\Unit;
 use App\ModelWithGetConstructor;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithGetConstructor
+ */
 class ModelWithGetConstructorTest extends TestCase
 {
     public function testGetText(): void

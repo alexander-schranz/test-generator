@@ -28,6 +28,9 @@ namespace App\Tests\Unit;
 use App\ModelWithSetGetSelf;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithSetGetSelf
+ */
 class ModelWithSetGetSelfTest extends TestCase
 {
     public function testSetGetTitle(): void

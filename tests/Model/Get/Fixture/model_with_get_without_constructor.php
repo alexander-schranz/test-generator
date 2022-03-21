@@ -24,6 +24,9 @@ namespace App\Tests\Unit;
 use App\ModelWithGetWithoutConstructor;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithGetWithoutConstructor
+ */
 class ModelWithGetWithoutConstructorTest extends TestCase
 {
     public function testGetId(): void

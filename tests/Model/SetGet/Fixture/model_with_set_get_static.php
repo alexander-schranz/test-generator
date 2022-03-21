@@ -28,6 +28,9 @@ namespace App\Tests\Unit;
 use App\ModelWithSetGetStatic;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \App\ModelWithSetGetStatic
+ */
 class ModelWithSetGetStaticTest extends TestCase
 {
     public function testSetGetTitle(): void
