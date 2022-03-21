@@ -63,7 +63,9 @@ Create a new `tests/generator-config.php` file:
 use Schranz\TestGenerator\Domain\Model\Config;
 
 $config = new Config();
-$config->hooks[] = 'vendor/bin/php-cs-fixer fix %s';
+// add following hooks if you want to use `rector` or `php-cs-fixer` directly on the created test files
+// $config->hooks[] = 'vendor/bin/rector process %s';
+// $config->hooks[] = 'vendor/bin/php-cs-fixer fix %s';
 
 return $config;
 ```
