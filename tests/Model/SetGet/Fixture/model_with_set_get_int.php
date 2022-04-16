@@ -37,7 +37,7 @@ class ModelWithSetGetIntTest extends TestCase
         $this->assertNull($model->getTitle());
         $model->setTitle(1);
         $this->assertSame(1, $model->getTitle());
-        $this->markAsIncomplete('This this was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance(): ModelWithSetGetInt

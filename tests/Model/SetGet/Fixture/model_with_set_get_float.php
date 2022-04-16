@@ -37,7 +37,7 @@ class ModelWithSetGetFloatTest extends TestCase
         $this->assertNull($model->getNumber());
         $model->setNumber(1.01);
         $this->assertSame(1.01, $model->getNumber());
-        $this->markAsIncomplete('This this was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance(): ModelWithSetGetFloat

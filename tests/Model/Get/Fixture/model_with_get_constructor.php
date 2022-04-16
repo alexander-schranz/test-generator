@@ -35,7 +35,7 @@ class ModelWithGetConstructorTest extends TestCase
     {
         $model = $this->createInstance(['text' => 'Text']);
         $this->assertSame('Text', $model->getText());
-        $this->markAsIncomplete('This this was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance($data = []): ModelWithGetConstructor

@@ -33,7 +33,7 @@ class ModelWithGetWithoutConstructorTest extends TestCase
     {
         $model = $this->createInstance();
         $this->assertSame('TODO', $model->getId());
-        $this->markAsIncomplete('This this was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance(): ModelWithGetWithoutConstructor

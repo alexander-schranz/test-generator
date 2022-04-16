@@ -39,7 +39,7 @@ class ModelWithSetGetBirthdayTest extends TestCase
         $birthday = new DateTimeImmutable('2022-01-01');
         $model->setBirthday($birthday);
         $this->assertSame($birthday, $model->getBirthday());
-        $this->markAsIncomplete('This this was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance(): ModelWithSetGetBirthday
