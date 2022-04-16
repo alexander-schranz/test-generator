@@ -39,7 +39,7 @@ class ModelWithSetGetSelfTest extends TestCase
         $this->assertNull($model->getTitle());
         $this->assertSame($model, $model->setTitle('Title'));
         $this->assertSame('Title', $model->getTitle());
-        $this->markAsRisky();
+        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance(): ModelWithSetGetSelf

@@ -39,7 +39,7 @@ class ModelWithSetGetBirthdayTest extends TestCase
         $birthday = new DateTime('2022-01-01');
         $model->setBirthday($birthday);
         $this->assertSame($birthday, $model->getBirthday());
-        $this->markAsRisky();
+        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance(): ModelWithSetGetBirthday
