@@ -1,6 +1,6 @@
 # PHP Test Generator
 
-This project make usages of [PHPStan](https://github.com/phpstan/phpstan) and [PHPParser](https://github.com/nikic/PHP-Parser)
+This project make usages of [PHPStan](https://github.com/phpstan/phpstan) (WIP) and [PHPParser](https://github.com/nikic/PHP-Parser)
 to generate test cases for a given PHP File.
 
 ## Why?
