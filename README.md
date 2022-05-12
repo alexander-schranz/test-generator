@@ -72,6 +72,19 @@ return $config;
 
 See [Config.php](src/Domain/Model/Config.php)  for all options.
 
+It is recommended to also configure in the projects `phpunit.xml` the `failOnIncomplete` to true:
+
+```diff
+<phpunit
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+     ...
++     failOnIncomplete="true"
+>
+```
+
+So generated tests fail automatically and require adjustments and review by the developer.
+
 ## Usage
 
 ```bash
