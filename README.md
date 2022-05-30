@@ -1,7 +1,7 @@
 # PHP Test Generator
 
 This project make usages of [PHPStan](https://github.com/phpstan/phpstan) (WIP) and [PHPParser](https://github.com/nikic/PHP-Parser)
-to generate test cases for a given PHP File.
+to generate test cases for a given PHP File by parsing its [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
 
 ## Why?
 
