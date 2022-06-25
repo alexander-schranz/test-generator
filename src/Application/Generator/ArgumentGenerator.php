@@ -20,6 +20,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use Ramsey\Uuid\Uuid;
 use function Symfony\Component\String\u;
 
 /**
@@ -59,6 +60,12 @@ class ArgumentGenerator
             }
 
             if ('string' === $typeName) {
+                if($attributeName === 'uuid'){
+                    $attributes[$attributeName] = $factory->methodCall($factory->staticCall('\\' . Uuid::class, 'uuid4'), 'toString');
+
+                    continue;
+                }
+
                 $attributes[$attributeName] = $factory->val(u($attributeName)->title()->toString());
                 continue;
             } elseif ('int' === $typeName) {

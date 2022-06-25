@@ -55,7 +55,7 @@ final class WriteVisitor extends NodeVisitorAbstract
             if ('get_set' === $testMethodConfig['type']) {
                 $method->addStmt(
                     new Node\Expr\Assign(
-                        $factory->var('model'),
+                        $factory->var('instance'),
                         $factory->methodCall($factory->var('this'), $testFactoryMethod)
                     )
                 );
@@ -67,7 +67,7 @@ final class WriteVisitor extends NodeVisitorAbstract
                         [
                             $factory->val(null),
                             $factory->methodCall(
-                                $factory->var('model'),
+                                $factory->var('instance'),
                                 $testMethodConfig['options']['getMethod']
                             ),
                         ]
@@ -83,22 +83,20 @@ final class WriteVisitor extends NodeVisitorAbstract
 
                 foreach ($setterArgumentsList as $setterArguments) {
                     foreach ($setterArguments as $attributeName => $setterArgument) {
-                        if ($setterArgument instanceof Node\Expr\New_) {
-                            $method->addStmt(
-                                new Node\Expr\Assign(
-                                    $factory->var($attributeName),
-                                    $setterArgument
-                                )
-                            );
+                        $method->addStmt(
+                            new Node\Expr\Assign(
+                                $factory->var($attributeName),
+                                $setterArgument
+                            )
+                        );
 
-                            $setterArguments[$attributeName] = $factory->var($attributeName);
-                        }
+                        $setterArguments[$attributeName] = $factory->var($attributeName);
                     }
 
                     $setterArguments = \array_values($setterArguments);
 
                     $setterMethod = $factory->methodCall(
-                        $factory->var('model'),
+                        $factory->var('instance'),
                         $testMethodConfig['options']['setMethod'],
                         $setterArguments
                     );
@@ -115,7 +113,7 @@ final class WriteVisitor extends NodeVisitorAbstract
                                 $factory->var('this'),
                                 'assertSame',
                                 [
-                                    $factory->var('model'),
+                                    $factory->var('instance'),
                                     $setterMethod,
                                 ]
                             )
@@ -129,7 +127,7 @@ final class WriteVisitor extends NodeVisitorAbstract
                             [
                                 $setterArguments[0] ?? null,
                                 $factory->methodCall(
-                                    $factory->var('model'),
+                                    $factory->var('instance'),
                                     $testMethodConfig['options']['getMethod']
                                 ),
                             ]
@@ -142,23 +140,25 @@ final class WriteVisitor extends NodeVisitorAbstract
                 $constructorArguments = [];
 
                 if (isset($generatedConstructParams[$methodAttributeName])) {
-                    if ($generatedConstructParams[$methodAttributeName] instanceof Node\Expr\New_) {
+                    if (array_key_exists($methodAttributeName, $constructAttributes['params'])) {
                         $method->addStmt(
                             new Node\Expr\Assign(
-                                $factory->var($methodAttributeName),
-                                $generatedConstructParams[$methodAttributeName]
+                                $factory->var('data'),
+                                new Node\Expr\Array_(
+                                    [
+                                        new Node\Expr\ArrayItem($generatedConstructParams[$methodAttributeName], $factory->val($methodAttributeName))
+                                    ]
+                                )
                             )
                         );
-
-                        $generatedConstructParams[$methodAttributeName] = $factory->var($methodAttributeName);
                     }
 
-                    $constructorArguments[] = [$methodAttributeName => $generatedConstructParams[$methodAttributeName]];
+                    $constructorArguments[] = $factory->var('data');
                 }
 
                 $method->addStmt(
                     new Node\Expr\Assign(
-                        $factory->var('model'),
+                        $factory->var('instance'),
                         $factory->methodCall(
                             $factory->var('this'),
                             $testFactoryMethod,
@@ -167,33 +167,38 @@ final class WriteVisitor extends NodeVisitorAbstract
                     )
                 );
 
+                $expectedValue = 'TODO';
+                if (\array_key_exists($methodAttributeName, $generatedConstructParams)) {
+                    $expectedValue = $factory->var('data["' . $methodAttributeName . '"]');
+                }
+
                 $method->addStmt(
                     $factory->methodCall(
                         $factory->var('this'),
                         'assertSame',
                         [
-                            $generatedConstructParams[$methodAttributeName] ?? 'TODO',
-                            $factory->methodCall($factory->var('model'), $testMethodConfig['options']['method']),
+                            $expectedValue,
+                            $factory->methodCall($factory->var('instance'), $testMethodConfig['options']['method']),
                         ]
                     )
                 );
             } elseif ('set' === $testMethodConfig['type']) {
                 $method->addStmt(
                     new Node\Expr\Assign(
-                        $factory->var('model'),
+                        $factory->var('instance'),
                         $factory->methodCall($factory->var('this'), $testFactoryMethod)
                     )
                 );
             } else {
                 $method->addStmt(
                     new Node\Expr\Assign(
-                        $factory->var('model'),
+                        $factory->var('instance'),
                         $factory->methodCall($factory->var('this'), $testFactoryMethod)
                     )
                 );
 
                 $method->addStmt(
-                    $factory->methodCall($factory->var('model'), $testMethodConfig['options']['method'])
+                    $factory->methodCall($factory->var('instance'), $testMethodConfig['options']['method'])
                 );
             }
 
