@@ -105,12 +105,21 @@ class MethodGrouper
                         'removeMethodAttributes' => $methods[$removeMethod],
                     ];
                 }
+
+                $getMethod = \str_replace('add', 'get', $method) . 's'; // TODO use pluralizer
+
+                if (isset($methods[$getMethod])) {
+                    $options = \array_merge($options, [
+                        'getMethod' => $getMethod,
+                        'getMethodAttributes' => $methods[$getMethod],
+                    ]);
+                }
             } elseif (\str_starts_with($method, 'remove')) {
                 $type = 'remove';
                 $addMethod = \str_replace('remove', 'add', $method);
                 if (isset($methods[$addMethod])) {
                     $type = 'add_remove';
-                    $name = 'testAddRemove' . \substr($method, 3);
+                    $name = 'testAddRemove' . \substr($method, 6);
 
                     $options = [
                         'addMethod' => $addMethod,
@@ -118,6 +127,13 @@ class MethodGrouper
                         'removeMethod' => $method,
                         'removeMethodAttributes' => $methodAttributes,
                     ];
+                }
+                $getMethod = \str_replace('remove', 'get', $method) . 's'; // TODO use pluralizer
+                if (isset($methods[$getMethod])) {
+                    $options = \array_merge($options, [
+                        'getMethod' => $getMethod,
+                        'getMethodAttributes' => $methods[$getMethod],
+                    ]);
                 }
             } elseif ('__construct' === $method) {
                 $type = 'construct';

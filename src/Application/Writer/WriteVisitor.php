@@ -40,6 +40,7 @@ final class WriteVisitor extends NodeVisitorAbstract
 
         $constructAttributes = ['params' => []];
         $constructArguments = [];
+
         foreach ($testMethodConfigs as $testMethodName => $testMethodConfig) {
             if ('construct' === $testMethodConfig['type']) {
                 $constructAttributes = $testMethodConfig['options']['attributes'];
@@ -184,6 +185,114 @@ final class WriteVisitor extends NodeVisitorAbstract
                         $factory->methodCall($factory->var('this'), $testFactoryMethod)
                     )
                 );
+            } elseif ('add_remove' === $testMethodConfig['type']) {
+                $method->addStmt(
+                    new Node\Expr\Assign(
+                        $factory->var('model'),
+                        $factory->methodCall($factory->var('this'), $testFactoryMethod)
+                    )
+                );
+
+                $addArgumentsList = [];
+                $addArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['addMethodAttributes'], 'minimal');
+                if ($addArgumentsList[0][\array_key_first($addArgumentsList[0])] instanceof Node\Expr\ConstFetch) {
+                    $addArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['addMethodAttributes'], 'full');
+                    $addArgumentsList = \array_reverse($addArgumentsList);
+                }
+
+                foreach ($addArgumentsList as $addArguments) {
+                    foreach ($addArguments as $attributeName => $addArgument) {
+                        if ($addArgument instanceof Node\Expr\New_) {
+                            $method->addStmt(
+                                new Node\Expr\Assign(
+                                    $factory->var($attributeName),
+                                    $addArgument
+                                )
+                            );
+
+                            $addArguments[$attributeName] = $factory->var($attributeName);
+                        }
+                    }
+
+                    $addArguments = \array_values($addArguments);
+
+                    $addMethod = $factory->methodCall(
+                        $factory->var('model'),
+                        $testMethodConfig['options']['addMethod'],
+                        $addArguments
+                    );
+
+                    $addReturnType = $testMethodConfig['options']['removeMethodAttributes']['returnType'];
+
+                    if ($addReturnType instanceof Identifier && 'void' === $addReturnType->name) {
+                        $method->addStmt(
+                            $addMethod
+                        );
+                    } else {
+                        $method->addStmt(
+                            $factory->methodCall(
+                                $factory->var('this'),
+                                'assertSame',
+                                [
+                                    $factory->var('model'),
+                                    $addMethod,
+                                ]
+                            )
+                        );
+                    }
+
+                    $getArguments = $this->argumentGenerator->generateArguments($testMethodConfig['options']['getMethodAttributes'], 'minimal');
+                    foreach ($addArguments as $addArgument) {
+                        $method->addStmt(
+                            $factory->methodCall(
+                                $factory->var('this'),
+                                'assertContains',
+                                [
+                                    $addArgument,
+                                    $factory->methodCall($factory->var('model'), $testMethodConfig['options']['getMethod'], $getArguments),
+                                ]
+                            )
+                        );
+                    }
+
+                    $removeMethod = $factory->methodCall(
+                        $factory->var('model'),
+                        $testMethodConfig['options']['removeMethod'],
+                        $addArguments
+                    );
+
+                    $removeReturnType = $testMethodConfig['options']['removeMethodAttributes']['returnType'];
+
+                    if ($removeReturnType instanceof Identifier && 'void' === $removeReturnType->name) {
+                        $method->addStmt(
+                            $removeMethod
+                        );
+                    } else {
+                        $method->addStmt(
+                            $factory->methodCall(
+                                $factory->var('this'),
+                                'assertSame',
+                                [
+                                    $factory->var('model'),
+                                    $removeMethod,
+                                ]
+                            )
+                        );
+                    }
+
+                    foreach ($addArguments as $addArgument) {
+                        $method->addStmt(
+                            $factory->methodCall(
+                                $factory->var('this'),
+                                'assertNotContains',
+                                [
+                                    $addArgument,
+                                    $factory->methodCall($factory->var('model'), $testMethodConfig['options']['getMethod'], $getArguments),
+                                ]
+                            )
+                        );
+                    }
+                }
             } else {
                 $method->addStmt(
                     new Node\Expr\Assign(
