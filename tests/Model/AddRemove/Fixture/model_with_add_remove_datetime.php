@@ -48,7 +48,7 @@ class ModelWithAddRemoveDateTimeTest extends TestCase
     {
         $model = $this->createInstance();
         $this->assertSame('TODO', $model->getDateTimes());
-        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markTestIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function testAddRemoveDateTime(): void
@@ -59,7 +59,7 @@ class ModelWithAddRemoveDateTimeTest extends TestCase
         $this->assertContains($datetime, $model->getDateTimes());
         $model->removeDateTime($datetime);
         $this->assertNotContains($datetime, $model->getDateTimes());
-        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markTestIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance(): ModelWithAddRemoveDateTime

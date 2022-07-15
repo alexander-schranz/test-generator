@@ -39,7 +39,7 @@ class ModelWithGetConstructorTest extends TestCase
         $dateTime = new DateTime('2022-01-01');
         $model = $this->createInstance(['dateTime' => $dateTime]);
         $this->assertSame($dateTime, $model->getDateTime());
-        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markTestIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance($data = []): ModelWithGetConstructor

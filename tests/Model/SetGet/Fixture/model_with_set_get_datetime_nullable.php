@@ -41,7 +41,7 @@ class ModelWithSetGetBirthdayTest extends TestCase
         $this->assertSame($birthday, $model->getBirthday());
         $model->setBirthday(null);
         $this->assertNull($model->getBirthday());
-        $this->markAsIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
+        $this->markTestIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
     }
 
     public function createInstance(): ModelWithSetGetBirthday
