@@ -109,7 +109,7 @@ class MethodGrouper
                 $getMethod = \str_replace('add', 'get', $method) . 's'; // TODO use pluralizer
 
                 if (isset($methods[$getMethod])) {
-                    $options = array_merge($options, [
+                    $options = \array_merge($options, [
                         'getMethod' => $getMethod,
                         'getMethodAttributes' => $methods[$getMethod],
                     ]);
@@ -130,7 +130,7 @@ class MethodGrouper
                 }
                 $getMethod = \str_replace('remove', 'get', $method) . 's'; // TODO use pluralizer
                 if (isset($methods[$getMethod])) {
-                    $options = array_merge($options, [
+                    $options = \array_merge($options, [
                         'getMethod' => $getMethod,
                         'getMethodAttributes' => $methods[$getMethod],
                     ]);

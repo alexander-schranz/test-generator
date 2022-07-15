@@ -20,6 +20,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+
 use function Symfony\Component\String\u;
 
 /**
