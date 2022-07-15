@@ -309,7 +309,7 @@ final class WriteVisitor extends NodeVisitorAbstract
             $method->addStmt(
                 $factory->methodCall(
                     $factory->var('this'),
-                    'markAsIncomplete',
+                    'markTestIncomplete',
                     ['This was generated with "schranz/test-generator" and should be adjusted.']
                 )
             );
