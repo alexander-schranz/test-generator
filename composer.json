@@ -31,13 +31,24 @@
     },
     "scripts": {
         "lint": [
+            "@lint-rector",
             "@php-cs",
             "@lint-composer"
+        ],
+        "fix": [
+            "@rector",
+            "@php-cs-fix"
+        ],
+        "rector": [
+            "@php vendor/bin/rector process"
+        ],
+        "lint-rector": [
+            "@php vendor/bin/rector process --dry-run"
         ],
         "lint-composer": "@composer validate --strict",
         "phpstan": "@php vendor/bin/phpstan analyze",
         "php-cs": "@php vendor/bin/php-cs-fixer fix --verbose --diff --dry-run",
-        "php-cs-fixer": "@php vendor/bin/php-cs-fixer fix",
+        "php-cs-fix": "@php vendor/bin/php-cs-fixer fix",
         "test": "@php vendor/bin/phpunit"
     },
     "require-dev": {

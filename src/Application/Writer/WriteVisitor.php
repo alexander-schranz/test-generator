@@ -6,7 +6,11 @@ namespace Schranz\TestGenerator\Application\Writer;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
@@ -55,7 +59,7 @@ final class WriteVisitor extends NodeVisitorAbstract
 
             if ('get_set' === $testMethodConfig['type']) {
                 $method->addStmt(
-                    new Node\Expr\Assign(
+                    new Assign(
                         $factory->var('model'),
                         $factory->methodCall($factory->var('this'), $testFactoryMethod)
                     )
@@ -77,16 +81,16 @@ final class WriteVisitor extends NodeVisitorAbstract
 
                 $setterArgumentsList = [];
                 $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'minimal');
-                if ($setterArgumentsList[0][\array_key_first($setterArgumentsList[0])] instanceof Node\Expr\ConstFetch) {
+                if ($setterArgumentsList[0][\array_key_first($setterArgumentsList[0])] instanceof ConstFetch) {
                     $setterArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['setMethodAttributes'], 'full');
                     $setterArgumentsList = \array_reverse($setterArgumentsList);
                 }
 
                 foreach ($setterArgumentsList as $setterArguments) {
                     foreach ($setterArguments as $attributeName => $setterArgument) {
-                        if ($setterArgument instanceof Node\Expr\New_) {
+                        if ($setterArgument instanceof New_) {
                             $method->addStmt(
-                                new Node\Expr\Assign(
+                                new Assign(
                                     $factory->var($attributeName),
                                     $setterArgument
                                 )
@@ -143,9 +147,9 @@ final class WriteVisitor extends NodeVisitorAbstract
                 $constructorArguments = [];
 
                 if (isset($generatedConstructParams[$methodAttributeName])) {
-                    if ($generatedConstructParams[$methodAttributeName] instanceof Node\Expr\New_) {
+                    if ($generatedConstructParams[$methodAttributeName] instanceof New_) {
                         $method->addStmt(
-                            new Node\Expr\Assign(
+                            new Assign(
                                 $factory->var($methodAttributeName),
                                 $generatedConstructParams[$methodAttributeName]
                             )
@@ -158,7 +162,7 @@ final class WriteVisitor extends NodeVisitorAbstract
                 }
 
                 $method->addStmt(
-                    new Node\Expr\Assign(
+                    new Assign(
                         $factory->var('model'),
                         $factory->methodCall(
                             $factory->var('this'),
@@ -180,14 +184,14 @@ final class WriteVisitor extends NodeVisitorAbstract
                 );
             } elseif ('set' === $testMethodConfig['type']) {
                 $method->addStmt(
-                    new Node\Expr\Assign(
+                    new Assign(
                         $factory->var('model'),
                         $factory->methodCall($factory->var('this'), $testFactoryMethod)
                     )
                 );
             } elseif ('add_remove' === $testMethodConfig['type']) {
                 $method->addStmt(
-                    new Node\Expr\Assign(
+                    new Assign(
                         $factory->var('model'),
                         $factory->methodCall($factory->var('this'), $testFactoryMethod)
                     )
@@ -195,16 +199,16 @@ final class WriteVisitor extends NodeVisitorAbstract
 
                 $addArgumentsList = [];
                 $addArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['addMethodAttributes'], 'minimal');
-                if ($addArgumentsList[0][\array_key_first($addArgumentsList[0])] instanceof Node\Expr\ConstFetch) {
+                if ($addArgumentsList[0][\array_key_first($addArgumentsList[0])] instanceof ConstFetch) {
                     $addArgumentsList[] = $this->argumentGenerator->generateArguments($testMethodConfig['options']['addMethodAttributes'], 'full');
                     $addArgumentsList = \array_reverse($addArgumentsList);
                 }
 
                 foreach ($addArgumentsList as $addArguments) {
                     foreach ($addArguments as $attributeName => $addArgument) {
-                        if ($addArgument instanceof Node\Expr\New_) {
+                        if ($addArgument instanceof New_) {
                             $method->addStmt(
-                                new Node\Expr\Assign(
+                                new Assign(
                                     $factory->var($attributeName),
                                     $addArgument
                                 )
@@ -295,7 +299,7 @@ final class WriteVisitor extends NodeVisitorAbstract
                 }
             } else {
                 $method->addStmt(
-                    new Node\Expr\Assign(
+                    new Assign(
                         $factory->var('model'),
                         $factory->methodCall($factory->var('this'), $testFactoryMethod)
                     )
@@ -321,7 +325,7 @@ final class WriteVisitor extends NodeVisitorAbstract
         foreach (\array_keys($constructAttributes['params']) as $key) {
             $args[] = new Coalesce(
                 $factory->var('data["' . $key . '"]'),
-                $constructArguments[$key] instanceof Node\Expr ? $constructArguments[$key] : $factory->val($constructArguments[$key])
+                $constructArguments[$key] instanceof Expr ? $constructArguments[$key] : $factory->val($constructArguments[$key])
             );
         }
 
@@ -340,7 +344,7 @@ final class WriteVisitor extends NodeVisitorAbstract
             ->makePublic();
 
         // TODO add phpdoc
-        if (\count($constructAttributes['params'])) {
+        if (\count($constructAttributes['params']) > 0) {
             $builder
                 ->addParam(
                     $factory->param('data')

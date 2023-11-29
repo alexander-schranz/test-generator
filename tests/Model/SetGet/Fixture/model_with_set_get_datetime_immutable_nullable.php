@@ -4,7 +4,7 @@ namespace App;
 
 class ModelWithSetGetBirthday
 {
-    private ?\DateTimeImmutable $birthday;
+    private ?\DateTimeImmutable $birthday = null;
 
     public function setBirthday(?\DateTimeImmutable $birthday): void
     {

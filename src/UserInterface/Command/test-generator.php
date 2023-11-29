@@ -103,7 +103,7 @@ use Symfony\Component\Process\Process;
 
         foreach ($config->hooks as $hook) {
             $process = Process::fromShellCommandline(\sprintf($hook, $unitTestFile));
-            if ($process->run()) {
+            if (0 !== $process->run()) {
                 $ui->error(\sprintf('Hook "%s" did fail.', $hook));
 
                 return 4;
