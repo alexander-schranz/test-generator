@@ -14,9 +14,9 @@
     "require": {
         "php": "^8.0",
         "nikic/php-parser": "^4.13",
-        "symfony/filesystem": "^5.4 || ^6.0",
-        "symfony/string": "^5.4 || ^6.0",
-        "symfony/process": "^5.4 || ^6.0"
+        "symfony/filesystem": "^5.4 || ^6.0 || ^7.0",
+        "symfony/string": "^5.4 || ^6.0 || ^7.0",
+        "symfony/process": "^5.4 || ^6.0 || ^7.0"
     },
     "autoload": {
         "psr-4": {
