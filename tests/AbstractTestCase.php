@@ -20,7 +20,7 @@ class AbstractTestCase extends TestCase
     /**
      * @return \Generator<\SplFileInfo>
      */
-    protected function yieldFilesFromDirectory(string $directory): \Generator
+    protected static function yieldFilesFromDirectory(string $directory): \Generator
     {
         $finder = new Finder();
         $finder->in($directory)
