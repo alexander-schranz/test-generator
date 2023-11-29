@@ -2,18 +2,21 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
+use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\LevelSetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->paths([\sys_get_temp_dir() . '/test-generator']);
 
-    $parameters->set(Option::PATHS, [\sys_get_temp_dir() . '/test-generator']);
-    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/../phpstan.neon');
+    $rectorConfig->phpstanConfigs([
+        __DIR__ . '/../phpstan.neon',
+    ]);
 
     // basic rules
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-    $containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
+    $rectorConfig->importNames();
+    $rectorConfig->importShortClasses(false);
+
+    $rectorConfig->sets([
+        LevelSetList::UP_TO_PHP_80,
+    ]);
 };

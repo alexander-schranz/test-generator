@@ -26,7 +26,6 @@ class ModelWithGetConstructor
 namespace App\Tests\Unit;
 
 use App\ModelWithGetConstructor;
-use DateTime;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,7 +35,7 @@ class ModelWithGetConstructorTest extends TestCase
 {
     public function testGetDateTime(): void
     {
-        $dateTime = new DateTime('2022-01-01');
+        $dateTime = new \DateTime('2022-01-01');
         $model = $this->createInstance(['dateTime' => $dateTime]);
         $this->assertSame($dateTime, $model->getDateTime());
         $this->markTestIncomplete('This was generated with "schranz/test-generator" and should be adjusted.');
@@ -44,6 +43,6 @@ class ModelWithGetConstructorTest extends TestCase
 
     public function createInstance($data = []): ModelWithGetConstructor
     {
-        return new ModelWithGetConstructor($data['dateTime'] ?? new DateTime('2022-01-01'));
+        return new ModelWithGetConstructor($data['dateTime'] ?? new \DateTime('2022-01-01'));
     }
 }
