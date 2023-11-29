@@ -20,7 +20,7 @@ class AbstractTestCase extends TestCase
     /**
      * @return \Generator<\SplFileInfo>
      */
-    protected function yieldFilesFromDirectory(string $directory): \Generator
+    protected static function yieldFilesFromDirectory(string $directory): \Generator
     {
         $finder = new Finder();
         $finder->in($directory)
@@ -71,12 +71,12 @@ class AbstractTestCase extends TestCase
             \file_put_contents($testFile, $result);
 
             $process = new Process(['vendor/bin/rector', 'process', $testFile, '--config', __DIR__ . '/rector.php'], \dirname(__DIR__));
-            if ($process->run()) {
+            if (0 !== $process->run()) {
                 throw new \RuntimeException('Rector did fail to fix the file.');
             }
 
             $process = new Process(['vendor/bin/php-cs-fixer', 'fix', $testFile, '--config', __DIR__ . '/.php-cs-fixer.dist.php'], \dirname(__DIR__));
-            if ($process->run()) {
+            if (0 !== $process->run()) {
                 throw new \RuntimeException('PHP CS Fixer did fail to fix the file.');
             }
 

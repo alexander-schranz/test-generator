@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Schranz\TestGenerator\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
+
 class Config
 {
     public string $srcDirectory = 'src';
@@ -19,7 +21,7 @@ class Config
     /**
      * @var class-string
      */
-    public string $testExtendedClass = 'PHPUnit\Framework\TestCase';
+    public string $testExtendedClass = TestCase::class;
 
     /**
      * @var string[]

@@ -28,11 +28,7 @@ class TestFileGenerator
 
         $testNamespace = \strrev($classParts[1]);
         foreach ($config->namespaceReplaces as $old => $new) {
-            if ($old === $testNamespace) {
-                $testNamespace = $new;
-            } else {
-                $testNamespace = \str_replace($old . '\\', $new . '\\', $testNamespace);
-            }
+            $testNamespace = $old === $testNamespace ? $new : \str_replace($old . '\\', $new . '\\', $testNamespace);
         }
         $testExtendClass = $config->testExtendedClass;
         $testExtendClassName = $config->getTestExtendedClassName();

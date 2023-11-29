@@ -19,8 +19,8 @@ class SetGetTest extends AbstractTestCase
     /**
      * @return \Generator<\SplFileInfo>
      */
-    public function provideData(): \Generator
+    public static function provideData(): \Generator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return self::yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 }

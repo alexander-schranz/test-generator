@@ -26,11 +26,13 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    - php-version: '8.0'
-                      dependency-versions: 'lowest'
-                      tools: 'composer:v2'
-
                     - php-version: '8.1'
+                      dependency-versions: 'lowest'
+
+                    - php-version: '8.2'
+                      dependency-versions: 'highest'
+
+                    - php-version: '8.3'
                       dependency-versions: 'highest'
 
         steps:

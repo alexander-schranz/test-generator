@@ -38,5 +38,7 @@ return (new PhpCsFixer\Config())
         'multiline_whitespace_before_semicolons' => true,
         'single_line_throw' => false,
         'visibility_required' => ['elements' => ['property', 'method', 'const']],
+        'nullable_type_declaration_for_default_null_value' => true,
+        'no_null_property_initialization' => false,
     ])
     ->setFinder($finder);

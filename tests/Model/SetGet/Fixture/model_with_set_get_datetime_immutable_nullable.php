@@ -4,7 +4,7 @@ namespace App;
 
 class ModelWithSetGetBirthday
 {
-    private ?\DateTimeImmutable $birthday;
+    private ?\DateTimeImmutable $birthday = null;
 
     public function setBirthday(?\DateTimeImmutable $birthday): void
     {
@@ -24,7 +24,6 @@ class ModelWithSetGetBirthday
 namespace App\Tests\Unit;
 
 use App\ModelWithSetGetBirthday;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,7 +35,7 @@ class ModelWithSetGetBirthdayTest extends TestCase
     {
         $model = $this->createInstance();
         $this->assertNull($model->getBirthday());
-        $birthday = new DateTimeImmutable('2022-01-01');
+        $birthday = new \DateTimeImmutable('2022-01-01');
         $model->setBirthday($birthday);
         $this->assertSame($birthday, $model->getBirthday());
         $model->setBirthday(null);

@@ -36,7 +36,6 @@ class ModelWithAddRemoveDateTime
 namespace App\Tests\Unit;
 
 use App\ModelWithAddRemoveDateTime;
-use DateTime;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,7 +53,7 @@ class ModelWithAddRemoveDateTimeTest extends TestCase
     public function testAddRemoveDateTime(): void
     {
         $model = $this->createInstance();
-        $datetime = new DateTime('2022-01-01');
+        $datetime = new \DateTime('2022-01-01');
         $model->addDateTime($datetime);
         $this->assertContains($datetime, $model->getDateTimes());
         $model->removeDateTime($datetime);
