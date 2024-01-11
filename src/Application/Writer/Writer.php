@@ -6,6 +6,7 @@ namespace Schranz\TestGenerator\Application\Writer;
 
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
+use PhpParser\ParserAbstract;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 
@@ -16,20 +17,24 @@ class Writer
 {
     public function write(string $existContent, WriteVisitor $writeVisitor): string
     {
-        $lexer = new Emulative([
-            'usedAttributes' => [
-                'comments',
-                'startLine', 'endLine',
-                'startTokenPos', 'endTokenPos',
-            ],
-        ]);
+        $lexer = null;
+        $parser =
+            \method_exists(ParserAbstract::class, 'getTokens')
+                ? (new ParserFactory())->createForNewestSupportedVersion()
+                : (new ParserFactory())->create(ParserFactory::PREFER_PHP7, $lexer = new Emulative([
+                    'usedAttributes' => [
+                        'comments',
+                        'startLine', 'endLine',
+                        'startTokenPos', 'endTokenPos',
+                    ],
+                ]));
 
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, $lexer);
         $nodes = $parser->parse($existContent);
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($writeVisitor);
         $printer = new Standard();
-        $oldTokens = $lexer->getTokens();
+
+        $oldTokens = $lexer instanceof Emulative ? $lexer->getTokens() : $parser->getTokens();
 
         $traversedNodes = $nodeTraverser->traverse($nodes);
 
