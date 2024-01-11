@@ -25,7 +25,7 @@ final class Reader
     {
         $readVisitor = new ReadVisitor();
 
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $parser = (new ParserFactory())->createForNewestSupportedVersion();
         $nodes = $parser->parse($content);
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($readVisitor);

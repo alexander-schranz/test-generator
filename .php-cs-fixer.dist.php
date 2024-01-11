@@ -40,5 +40,8 @@ return (new PhpCsFixer\Config())
         'visibility_required' => ['elements' => ['property', 'method', 'const']],
         'nullable_type_declaration_for_default_null_value' => true,
         'no_null_property_initialization' => false,
+        'fully_qualified_strict_types' => [
+            'leading_backslash_in_global_namespace' => true,
+        ],
     ])
     ->setFinder($finder);
